@@ -1,61 +1,93 @@
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import Login from './components/Login'
+import Register from './components/Register'
+import Dashboard from './components/Dashboard'
+import { api } from './services/api'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [backendStatus, setBackendStatus] = useState('Testing connection...')
-  const [connectionSuccess, setConnectionSuccess] = useState(false)
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  // Test backend connection
+  // Check if user is authenticated on app load
   useEffect(() => {
-    const testBackendConnection = async () => {
+    const checkAuth = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/test', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        
-        if (response.ok) {
-          const data = await response.json()
-          setBackendStatus(`✅ ${data.message} (${data.timestamp})`)
-          setConnectionSuccess(true)
-        } else {
-          setBackendStatus(`❌ Backend responded with status: ${response.status}`)
-          setConnectionSuccess(false)
+        const response = await api.get('/auth/me')
+        if (response.success) {
+          setUser(response.user)
         }
       } catch (error) {
-        setBackendStatus(`❌ Connection failed: ${error.message}`)
-        setConnectionSuccess(false)
+        console.log('Not authenticated')
+      } finally {
+        setLoading(false)
       }
     }
 
-    testBackendConnection()
+    checkAuth()
   }, [])
 
-  return (
-    <>
-      
-      {/* Backend Connection Status */}
-      <div className="card" style={{ 
-        backgroundColor: connectionSuccess ? '#d4edda' : '#f8d7da',
-        border: `1px solid ${connectionSuccess ? '#c3e6cb' : '#f5c6cb'}`,
-        borderRadius: '8px',
-        padding: '1rem',
-        margin: '1rem 0'
+  const handleLogin = (userData) => {
+    setUser(userData)
+  }
+
+  const handleLogout = async () => {
+    try {
+      await api.post('/auth/logout')
+      setUser(null)
+    } catch (error) {
+      console.error('Logout error:', error)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh' 
       }}>
-        <h3>Backend Connection Status</h3>
-        <p style={{ 
-          color: connectionSuccess ? '#155724' : '#721c24',
-          fontWeight: 'bold'
-        }}>
-          {backendStatus}
-        </p>
+        <div>Loading...</div>
       </div>
-    </>
+    )
+  }
+
+  return (
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route 
+            path="/login" 
+            element={
+              user ? <Navigate to="/dashboard" /> : <Login onLogin={handleLogin} />
+            } 
+          />
+          <Route 
+            path="/register" 
+            element={
+              user ? <Navigate to="/dashboard" /> : <Register onLogin={handleLogin} />
+            } 
+          />
+          <Route 
+            path="/dashboard" 
+            element={
+              user ? <Dashboard user={user} onLogout={handleLogout} /> : <Navigate to="/login" />
+            } 
+          />
+          <Route 
+            path="/" 
+            element={<Navigate to={user ? "/dashboard" : "/login"} />} 
+          />
+          {/* Catch-all for unmatched routes */}
+          <Route 
+            path="*" 
+            element={<Navigate to={user ? "/dashboard" : "/login"} />} 
+          />
+        </Routes>
+      </div>
+    </Router>
   )
 }
 
