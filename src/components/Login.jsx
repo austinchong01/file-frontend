@@ -17,6 +17,7 @@ const Login = () => {
     
     if (result.success) {
       setMessage(`Login successful! Welcome ${result.user.name}`);
+      navigate('/dashboard');
     } else {
       setMessage(`Login failed: ${result.message}`);
     }

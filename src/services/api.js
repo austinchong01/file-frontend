@@ -68,6 +68,99 @@ export const api = {
       console.error('Registration failed:', error);
       return { success: false, message: error.message };
     }
+  },
+
+  async dashboard() {
+    try {
+      const response = await fetch(`${BACKEND_URL}/dashboard`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Dashboard fetch failed:', error);
+      return { success: false, message: error.message };
+    }
+  },
+
+  async download(fileId) {
+    try {
+      // Create a temporary anchor element to trigger download
+      const link = document.createElement('a');
+      link.href = `${BACKEND_URL}/files/${fileId}/download`;
+      link.target = '_blank'; // Open in new tab to avoid navigation issues
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      return { success: true };
+    } catch (error) {
+      console.error('Download failed:', error);
+      return { success: false, message: error.message };
+    }
+  },
+
+  async renameFile(fileId, displayName) {
+    try {
+      const response = await fetch(`${BACKEND_URL}/files/rename`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fileId: fileId,
+          displayName: displayName
+        })
+      });
+      
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Rename failed:', error);
+      return { success: false, message: error.message };
+    }
+  },
+
+  async deleteFile(fileId) {
+    try {
+      const response = await fetch(`${BACKEND_URL}/files/${fileId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Delete failed:', error);
+      return { success: false, message: error.message };
+    }
+  },
+
+  async upload(file) {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch(`${BACKEND_URL}/files/upload`, {
+        method: 'POST',
+        credentials: 'include',
+        body: formData
+      });
+      
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Upload failed:', error);
+      return { success: false, message: error.message };
+    }
   }
 
 };
