@@ -1,22 +1,11 @@
-// src/components/File.jsx
+// src/components/Folder.jsx
 import { useState } from 'react';
 import { api } from '../services/api';
 
-const File = ({ file, onFileDeleted }) => {
+const Folder = ({ folder }) => {
   const [message, setMessage] = useState('');
   const [isRenaming, setIsRenaming] = useState(false);
-  const [newName, setNewName] = useState(file.displayName || file.originalName);
-
-  const handleDownload = async () => {
-    setMessage('Downloading...');
-    const result = await api.download(file.id);
-    
-    if (result.success) {
-      setMessage('Download started');
-    } else {
-      setMessage(`Download failed: ${result.message}`);
-    }
-  };
+  const [newName, setNewName] = useState(folder.displayName || folder.originalName);
 
   const handleRename = async () => {
     if (!isRenaming) {
@@ -25,10 +14,10 @@ const File = ({ file, onFileDeleted }) => {
     }
 
     setMessage('Renaming...');
-    const result = await api.renameFile(file.id, newName);
+    const result = await api.renameFile(folder.id, newName);
     
     if (result.success) {
-      setMessage('File renamed successfully');
+      setMessage('Folder renamed successfully');
       setIsRenaming(false);
     } else {
       setMessage(`Rename failed: ${result.message}`);
@@ -37,27 +26,20 @@ const File = ({ file, onFileDeleted }) => {
 
   const cancelRename = () => {
     setIsRenaming(false);
-    setNewName(file.displayName || file.originalName);
+    setNewName(folder.displayName || folder.originalName);
   };
 
-  const handlePreview = () => {
-    if (file.cloudinaryUrl) {
-      window.open(file.cloudinaryUrl, '_blank');
-    } else {
-      setMessage('Preview not available');
-  }
-};
 
   const handleDelete = async () => {
-    if (!confirm(`Are you sure you want to delete "${file.displayName || file.originalName}"?`)) {
+    if (!confirm(`Are you sure you want to delete "${folder.displayName || folder.originalName}"?`)) {
       return;
     }
 
     setMessage('Deleting...');
-    const result = await api.deleteFile(file.id);
+    const result = await api.deleteFolder(folder.id);
     
     if (result.success) {
-      setMessage('File deleted successfully');
+      setMessage('Folder deleted successfully');
       // Call the callback with the file ID to remove it from state
       if (onFileDeleted) {
         onFileDeleted(file.id);
@@ -81,9 +63,7 @@ const File = ({ file, onFileDeleted }) => {
         </div>
       ) : (
         <div>
-          <span>{file.displayName || file.originalName}</span>
-          <button onClick={handleDownload}>Download</button>
-          <button onClick={handlePreview}>Preview</button>
+          <span>{folder.displayName || folder.originalName}</span>
           <button onClick={handleRename}>Rename</button>
           <button onClick={handleDelete}>Delete</button>
         </div>
@@ -93,4 +73,4 @@ const File = ({ file, onFileDeleted }) => {
   );
 };
 
-export default File;
+export default Folder;

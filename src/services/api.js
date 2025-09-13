@@ -161,6 +161,35 @@ export const api = {
       console.error('Upload failed:', error);
       return { success: false, message: error.message };
     }
+  },
+
+  async newFolder(folderName){
+    try {
+      const response = await fetch(`${import.meta.env.BACKEND_URL}/folders/create`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          name: folderName.trim(),
+          parentId: '' // Empty for root level folders
+        })
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        setFolderMessage("Folder created successfully!");
+        // Refresh dashboard to show new folder
+        await loadDashboard();
+      } else {
+        setFolderMessage(`Failed to create folder: ${result.message}`);
+      }
+    } catch (error) {
+      console.error('Create folder failed:', error);
+      setFolderMessage(`Error creating folder: ${error.message}`);
+    }
   }
 
 };
