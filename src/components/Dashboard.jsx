@@ -85,44 +85,81 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
-      {message}
-      
-      <div>
-        <input 
-          type="file" 
-          onChange={handleFileUpload}
-          accept="image/*,video/*,application/pdf"
-        />
-        <button onClick={handleCreateFolder}>Add Folder</button>
-        {uploadMessage && <p>{uploadMessage}</p>}
-        {folderMessage && <p>{folderMessage}</p>}
+    <div className="min-h-screen bg-gray-100">
+      {/* Header */}
+      <div className="bg-blue-700 text-white px-8 py-4">
+        <h1 className="text-2xl font-bold">{message}</h1>
       </div>
-
-      {folders.length > 0 && (
-        <div>
-          <h2>Your Folders:</h2>
-          {folders.map((folder) => (
-            <div key={folder.id}>
-              <Folder key={folder.id} folder={folder} onFolderDeleted={handleFolderDeleted}/>
+      
+      {/* Main Content */}
+      <div className="max-w-4xl mx-auto p-6">
+        {/* Upload Section */}
+        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Add Files & Folders</h2>
+          
+          <div className="flex flex-col sm:flex-row gap-4 mb-4">
+            <div className="flex-1">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Upload File:
+              </label>
+              <input 
+                type="file" 
+                onChange={handleFileUpload}
+                accept="image/*,video/*,application/pdf"
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
+              />
             </div>
-          ))}
+            
+            <div className="flex items-end">
+              <button 
+                onClick={handleCreateFolder}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Add Folder
+              </button>
+            </div>
+          </div>
+          
+          {/* Messages */}
+          {uploadMessage && (
+            <p className="text-sm text-gray-600 mb-2">{uploadMessage}</p>
+          )}
+          {folderMessage && (
+            <p className="text-sm text-gray-600">{folderMessage}</p>
+          )}
         </div>
-      )}
 
-      {files.length > 0 && (
-        <div>
-          <h2>Your Files:</h2>
-          {files.map((file) => (
-            <File 
-              key={file.id} 
-              file={file} 
-              onFileDeleted={handleFileDeleted}
-              onFileRenamed={handleFileRenamed}
-            />
-          ))}
-        </div>
-      )}
+        {/* Folders Section */}
+        {folders.length > 0 && (
+          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-6">
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Your Folders:</h2>
+            <div className="space-y-2">
+              {folders.map((folder) => (
+                <div key={folder.id}>
+                  <Folder key={folder.id} folder={folder} onFolderDeleted={handleFolderDeleted}/>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Files Section */}
+        {files.length > 0 && (
+          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8">
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Your Files:</h2>
+            <div className="space-y-2">
+              {files.map((file) => (
+                <File 
+                  key={file.id} 
+                  file={file} 
+                  onFileDeleted={handleFileDeleted}
+                  onFileRenamed={handleFileRenamed}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -65,7 +65,6 @@ const Folder = ({ folder, onFolderDeleted }) => {
     setFolderFiles([]);
   };
 
-  // Updated function to handle file upload
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -82,7 +81,6 @@ const Folder = ({ folder, onFolderDeleted }) => {
     }
   };
 
-  // Function to trigger the hidden file input
   const triggerFileUpload = () => {
     document.getElementById(`file-input-${folder.id}`).click();
   };
@@ -104,50 +102,116 @@ const Folder = ({ folder, onFolderDeleted }) => {
   return (
     <div>
       {isViewingContents ? (
-        <div>
-          <button onClick={handleBackToFolder}>← Back</button>
-          <button onClick={triggerFileUpload}>Upload File</button>
-          <input 
-            id={`file-input-${folder.id}`}
-            type="file" 
-            onChange={handleFileUpload}
-            accept="image/*,video/*,application/pdf"
-          />
-          <h3>Contents of {currentName}</h3>
-          {folderFiles.length > 0 ? (
-            folderFiles.map((file) => (
-              <File
-                key={file.id}
-                file={file}
-                onFileDeleted={handleFileDeleted}
-                onFileRenamed={handleFileRenamed}
-              />
-            ))
-          ) : (
-            <p>No files in this folder</p>
-          )}
+        <div className="min-h-screen bg-gray-100">
+          {/* Header */}
+          <div className="bg-blue-500 text-white px-8 py-4">
+            <div className="flex items-center gap-4">
+              <button 
+                onClick={handleBackToFolder}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                ← Back
+              </button>
+              <h1 className="text-2xl font-bold">Contents of {currentName}</h1>
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="max-w-4xl mx-auto p-6">
+            {/* Upload Section */}
+            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-6">
+              <h2 className="text-xl font-bold text-gray-800 mb-4">Upload File to Folder</h2>
+              <div className="flex items-center gap-4">
+                <button 
+                  onClick={triggerFileUpload}
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  Upload File
+                </button>
+                <input 
+                  id={`file-input-${folder.id}`}
+                  type="file" 
+                  onChange={handleFileUpload}
+                  accept="image/*,video/*,application/pdf"
+                  className="hidden"
+                />
+              </div>
+            </div>
+
+            {/* Files Section */}
+            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8">
+              <h2 className="text-xl font-bold text-gray-800 mb-4">Files in Folder</h2>
+              {folderFiles.length > 0 ? (
+                <div className="space-y-3">
+                  {folderFiles.map((file) => (
+                    <File
+                      key={file.id}
+                      file={file}
+                      onFileDeleted={handleFileDeleted}
+                      onFileRenamed={handleFileRenamed}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-600 text-center py-8">No files in this folder</p>
+              )}
+            </div>
+          </div>
         </div>
       ) : (
-        <>
+        <div className="border border-gray-200 rounded-lg p-4 bg-blue-50">
           {isRenaming ? (
-            <div>
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="text"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
+                className="flex-1 px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
               />
-              <button onClick={handleRename}>Save</button>
-              <button onClick={cancelRename}>Cancel</button>
+              <div className="flex gap-2">
+                <button 
+                  onClick={handleRename}
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm"
+                >
+                  Save
+                </button>
+                <button 
+                  onClick={cancelRename}
+                  className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded text-sm"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           ) : (
-            <div>
-              <span>{currentName}</span>
-              <button onClick={handleViewFolder}>View Folder</button>
-              <button onClick={handleRename}>Rename</button>
-              <button onClick={handleDelete}>Delete</button>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-blue-600 text-lg">📁</span>
+                <span className="text-gray-800 font-medium">{currentName}</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button 
+                  onClick={handleViewFolder}
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-sm"
+                >
+                  View Folder
+                </button>
+                <button 
+                  onClick={handleRename}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded text-sm"
+                >
+                  Rename
+                </button>
+                <button 
+                  onClick={handleDelete}
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded text-sm"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );
