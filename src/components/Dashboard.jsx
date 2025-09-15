@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
 import File from "./File";
+import Folder from "./Folder"
 
 const Dashboard = () => {
   const [files, setFiles] = useState([]);
@@ -66,8 +67,11 @@ const Dashboard = () => {
   };
 
   const handleFileDeleted = (deletedFileId) => {
-    // Remove the deleted file from the local state
     setFiles(prevFiles => prevFiles.filter(file => file.id !== deletedFileId));
+  };
+
+  const handleFolderDeleted = (deletedFolderId) => {
+    setFiles(prevFolders => prevFolders.filter(folder => folder.id !== deletedFolderId));
   };
 
   return (
@@ -90,7 +94,7 @@ const Dashboard = () => {
           <h2>Your Folders:</h2>
           {folders.map((folder) => (
             <div key={folder.id}>
-              <span>{folder.name}</span>
+              <Folder key={folder.id} folder={folder} onFolderDeleted={handleFolderDeleted}/>
             </div>
           ))}
         </div>

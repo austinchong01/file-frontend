@@ -163,33 +163,66 @@ export const api = {
     }
   },
 
-  async newFolder(folderName){
+async newFolder(folderName){
+  try {
+    const response = await fetch(`${BACKEND_URL}/folders/create`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: folderName,
+        parentId: ""
+      })
+    });
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Create folder failed:', error);
+    return { success: false, message: error.message };
+  }
+},
+
+  // async renameFolder(folderId, displayName) {
+  //   try {
+  //     const response = await fetch(`${BACKEND_URL}/folders/rename`, {
+  //       method: 'POST',
+  //       credentials: 'include',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         folderId: folderId,
+  //         displayName: displayName
+  //       })
+  //     });
+      
+  //     const data = await response.json();
+  //     return data;
+  //   } catch (error) {
+  //     console.error('Rename failed:', error);
+  //     return { success: false, message: error.message };
+  //   }
+  // },
+
+    async deleteFolder(folderId) {
     try {
-      const response = await fetch(`${import.meta.env.BACKEND_URL}/folders/create`, {
-        method: 'POST',
+      const response = await fetch(`${BACKEND_URL}/folders/${folderId}`, {
+        method: 'DELETE',
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
         },
-        body: new URLSearchParams({
-          name: folderName.trim(),
-          parentId: '' // Empty for root level folders
-        })
       });
       
-      const result = await response.json();
-      
-      if (result.success) {
-        setFolderMessage("Folder created successfully!");
-        // Refresh dashboard to show new folder
-        await loadDashboard();
-      } else {
-        setFolderMessage(`Failed to create folder: ${result.message}`);
-      }
+      const data = await response.json();
+      return data;
     } catch (error) {
-      console.error('Create folder failed:', error);
-      setFolderMessage(`Error creating folder: ${error.message}`);
+      console.error('Delete failed:', error);
+      return { success: false, message: error.message };
     }
-  }
+  },
 
 };
