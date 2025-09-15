@@ -71,7 +71,7 @@ const Dashboard = () => {
   };
 
   const handleFolderDeleted = (deletedFolderId) => {
-    setFiles(prevFolders => prevFolders.filter(folder => folder.id !== deletedFolderId));
+    setFolders(prevFolders => prevFolders.filter(folder => folder.id !== deletedFolderId));
   };
 
   return (

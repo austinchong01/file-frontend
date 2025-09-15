@@ -207,7 +207,7 @@ async newFolder(folderName){
   //   }
   // },
 
-    async deleteFolder(folderId) {
+  async deleteFolder(folderId) {
     try {
       const response = await fetch(`${BACKEND_URL}/folders/${folderId}`, {
         method: 'DELETE',
