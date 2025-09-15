@@ -2,19 +2,18 @@
 import { useState } from 'react';
 import { api } from '../services/api';
 
-const File = ({ file, onFileDeleted }) => {
-  const [message, setMessage] = useState('');
+const File = ({ file, onFileDeleted, onFileRenamed }) => {
   const [isRenaming, setIsRenaming] = useState(false);
   const [newName, setNewName] = useState(file.displayName || file.originalName);
 
   const handleDownload = async () => {
-    setMessage('Downloading...');
+    console.log('Downloading...');
     const result = await api.download(file.id);
     
     if (result.success) {
-      setMessage('Download started');
+      console.log('Download started');
     } else {
-      setMessage(`Download failed: ${result.message}`);
+      console.log(`Download failed: ${result.message}`);
     }
   };
 
@@ -24,14 +23,18 @@ const File = ({ file, onFileDeleted }) => {
       return;
     }
 
-    setMessage('Renaming...');
+    console.log('Renaming...');
     const result = await api.renameFile(file.id, newName);
     
     if (result.success) {
-      setMessage('File renamed successfully');
+      console.log('File renamed successfully');
       setIsRenaming(false);
+      // Call the callback to update the parent component
+      if (onFileRenamed) {
+        onFileRenamed(file.id, newName);
+      }
     } else {
-      setMessage(`Rename failed: ${result.message}`);
+      console.log(`Rename failed: ${result.message}`);
     }
   };
 
@@ -44,7 +47,7 @@ const File = ({ file, onFileDeleted }) => {
     if (file.cloudinaryUrl) {
       window.open(file.cloudinaryUrl, '_blank');
     } else {
-      setMessage('Preview not available');
+      console.log('Preview not available');
   }
 };
 
@@ -53,17 +56,17 @@ const File = ({ file, onFileDeleted }) => {
       return;
     }
 
-    setMessage('Deleting...');
+    console.log('Deleting...');
     const result = await api.deleteFile(file.id);
     
     if (result.success) {
-      setMessage('File deleted successfully');
+      console.log('File deleted successfully');
       // Call the callback with the file ID to remove it from state
       if (onFileDeleted) {
         onFileDeleted(file.id);
       }
     } else {
-      setMessage(`Delete failed: ${result.message}`);
+      console.log(`Delete failed: ${result.message}`);
     }
   };
 
@@ -88,7 +91,6 @@ const File = ({ file, onFileDeleted }) => {
           <button onClick={handleDelete}>Delete</button>
         </div>
       )}
-      {message && <p>{message}</p>}
     </div>
   );
 };

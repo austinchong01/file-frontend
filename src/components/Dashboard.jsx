@@ -70,6 +70,16 @@ const Dashboard = () => {
     setFiles(prevFiles => prevFiles.filter(file => file.id !== deletedFileId));
   };
 
+  const handleFileRenamed = (renamedFileId, newName) => {
+    setFiles(prevFiles => 
+      prevFiles.map(file => 
+        file.id === renamedFileId 
+          ? { ...file, displayName: newName }
+          : file
+      )
+    );
+  };
+
   const handleFolderDeleted = (deletedFolderId) => {
     setFolders(prevFolders => prevFolders.filter(folder => folder.id !== deletedFolderId));
   };
@@ -104,7 +114,12 @@ const Dashboard = () => {
         <div>
           <h2>Your Files:</h2>
           {files.map((file) => (
-            <File key={file.id} file={file} onFileDeleted={handleFileDeleted} />
+            <File 
+              key={file.id} 
+              file={file} 
+              onFileDeleted={handleFileDeleted}
+              onFileRenamed={handleFileRenamed}
+            />
           ))}
         </div>
       )}

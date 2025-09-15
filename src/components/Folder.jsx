@@ -4,8 +4,6 @@ import { api } from "../services/api";
 import File from "./File";
 
 const Folder = ({ folder, onFolderDeleted }) => {
-  const [message, setMessage] = useState("");
-  const [uploadMessage, setUploadMessage] = useState("");
   const [isRenaming, setIsRenaming] = useState(false);
   const [newName, setNewName] = useState(folder.name);
   const [currentName, setCurrentName] = useState(folder.name);
@@ -18,15 +16,15 @@ const Folder = ({ folder, onFolderDeleted }) => {
       return;
     }
 
-    setMessage("Renaming...");
+    console.log("Renaming...");
     const result = await api.renameFolder(folder.id, newName);
 
     if (result.success) {
-      setMessage("Folder renamed successfully");
+      console.log("Folder renamed successfully");
       setCurrentName(newName);
       setIsRenaming(false);
     } else {
-      setMessage(`Rename failed: ${result.message}`);
+      console.log(`Rename failed: ${result.message}`);
     }
   };
 
@@ -39,15 +37,15 @@ const Folder = ({ folder, onFolderDeleted }) => {
     if (!confirm(`Are you sure you want to delete "${currentName}"?`)) {
       return;
     }
-    setMessage("Deleting...");
+    console.log("Deleting...");
     const result = await api.deleteFolder(folder.id);
     if (result.success) {
-      setMessage("Folder deleted successfully");
+      console.log("Folder deleted successfully");
       if (onFolderDeleted) {
         onFolderDeleted(folder.id);
       }
     } else {
-      setMessage(`Delete failed: ${result.message}`);
+      console.log(`Delete failed: ${result.message}`);
     }
   };
 
@@ -58,33 +56,29 @@ const Folder = ({ folder, onFolderDeleted }) => {
       setFolderFiles(result.files);
       setIsViewingContents(true);
     } else {
-      setMessage(`Failed to Retrieve Folder: ${result.message}`);
+      console.log(`Failed to Retrieve Folder: ${result.message}`);
     }
   };
 
   const handleBackToFolder = () => {
     setIsViewingContents(false);
     setFolderFiles([]);
-    setUploadMessage(""); // Clear upload message when going back
   };
 
   // Updated function to handle file upload
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
-
-    setUploadMessage("Uploading...");
     
     const result = await api.uploadFileInFolder(file, folder.id);
     
     if (result.success) {
-      setUploadMessage("File uploaded successfully!");
       const refreshResult = await api.getFolder(folder.id);
       if (refreshResult.success) {
         setFolderFiles(refreshResult.files);
       }
     } else {
-      setUploadMessage(`Upload failed: ${result.message}`);
+      console.log(`Upload failed: ${result.message}`);
     }
   };
 
@@ -95,6 +89,16 @@ const Folder = ({ folder, onFolderDeleted }) => {
 
   const handleFileDeleted = (deletedFileId) => {
     setFolderFiles(prevFiles => prevFiles.filter(file => file.id !== deletedFileId));
+  };
+
+  const handleFileRenamed = (renamedFileId, newName) => {
+    setFolderFiles(prevFiles => 
+      prevFiles.map(file => 
+        file.id === renamedFileId 
+          ? { ...file, displayName: newName }
+          : file
+      )
+    );
   };
 
   return (
@@ -110,13 +114,13 @@ const Folder = ({ folder, onFolderDeleted }) => {
             accept="image/*,video/*,application/pdf"
           />
           <h3>Contents of {currentName}</h3>
-          {uploadMessage && <p>{uploadMessage}</p>}
           {folderFiles.length > 0 ? (
             folderFiles.map((file) => (
               <File
                 key={file.id}
                 file={file}
                 onFileDeleted={handleFileDeleted}
+                onFileRenamed={handleFileRenamed}
               />
             ))
           ) : (
@@ -143,7 +147,6 @@ const Folder = ({ folder, onFolderDeleted }) => {
               <button onClick={handleDelete}>Delete</button>
             </div>
           )}
-          {message && <p>{message}</p>}
         </>
       )}
     </div>
