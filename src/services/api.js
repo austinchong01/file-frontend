@@ -163,49 +163,49 @@ export const api = {
     }
   },
 
-async newFolder(folderName){
-  try {
-    const response = await fetch(`${BACKEND_URL}/folders/create`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: folderName,
-        parentId: ""
-      })
-    });
-    
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Create folder failed:', error);
-    return { success: false, message: error.message };
-  }
-},
-
-  // async renameFolder(folderId, displayName) {
-  //   try {
-  //     const response = await fetch(`${BACKEND_URL}/folders/rename`, {
-  //       method: 'POST',
-  //       credentials: 'include',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         folderId: folderId,
-  //         displayName: displayName
-  //       })
-  //     });
+  async newFolder(folderName){
+    try {
+      const response = await fetch(`${BACKEND_URL}/folders/create`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: folderName,
+          parentId: ""
+        })
+      });
       
-  //     const data = await response.json();
-  //     return data;
-  //   } catch (error) {
-  //     console.error('Rename failed:', error);
-  //     return { success: false, message: error.message };
-  //   }
-  // },
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Create folder failed:', error);
+      return { success: false, message: error.message };
+    }
+  },
+
+  async renameFolder(folderId, name) {
+    try {
+      const response = await fetch(`${BACKEND_URL}/folders/rename`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          folderId: folderId,
+          name: name
+        })
+      });
+      
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Rename failed:', error);
+      return { success: false, message: error.message };
+    }
+  },
 
   async deleteFolder(folderId) {
     try {
@@ -224,5 +224,23 @@ async newFolder(folderName){
       return { success: false, message: error.message };
     }
   },
+
+  async getFolder(folderId) {
+    try {
+      const response = await fetch(`${BACKEND_URL}/folders/${folderId}`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Get Folder failed:', error);
+      return { success: false, message: error.message };
+    }
+  }
 
 };
