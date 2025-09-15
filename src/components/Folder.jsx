@@ -1,10 +1,11 @@
 // src/components/Folder.jsx
 import { useState } from "react";
 import { api } from "../services/api";
-import File from "./File"; // Add this line
+import File from "./File";
 
 const Folder = ({ folder, onFolderDeleted }) => {
   const [message, setMessage] = useState("");
+  const [uploadMessage, setUploadMessage] = useState("");
   const [isRenaming, setIsRenaming] = useState(false);
   const [newName, setNewName] = useState(folder.name);
   const [currentName, setCurrentName] = useState(folder.name);
@@ -61,13 +62,37 @@ const Folder = ({ folder, onFolderDeleted }) => {
     }
   };
 
-  // Add this function to go back
   const handleBackToFolder = () => {
     setIsViewingContents(false);
     setFolderFiles([]);
+    setUploadMessage(""); // Clear upload message when going back
   };
 
-  // Add this function after handleBackToFolder
+  // Updated function to handle file upload
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    setUploadMessage("Uploading...");
+    
+    const result = await api.uploadFileInFolder(file, folder.id);
+    
+    if (result.success) {
+      setUploadMessage("File uploaded successfully!");
+      const refreshResult = await api.getFolder(folder.id);
+      if (refreshResult.success) {
+        setFolderFiles(refreshResult.files);
+      }
+    } else {
+      setUploadMessage(`Upload failed: ${result.message}`);
+    }
+  };
+
+  // Function to trigger the hidden file input
+  const triggerFileUpload = () => {
+    document.getElementById(`file-input-${folder.id}`).click();
+  };
+
   const handleFileDeleted = (deletedFileId) => {
     setFolderFiles(prevFiles => prevFiles.filter(file => file.id !== deletedFileId));
   };
@@ -77,7 +102,15 @@ const Folder = ({ folder, onFolderDeleted }) => {
       {isViewingContents ? (
         <div>
           <button onClick={handleBackToFolder}>← Back</button>
-          <h3>Contents of {folder.name}</h3>
+          <button onClick={triggerFileUpload}>Upload File</button>
+          <input 
+            id={`file-input-${folder.id}`}
+            type="file" 
+            onChange={handleFileUpload}
+            accept="image/*,video/*,application/pdf"
+          />
+          <h3>Contents of {currentName}</h3>
+          {uploadMessage && <p>{uploadMessage}</p>}
           {folderFiles.length > 0 ? (
             folderFiles.map((file) => (
               <File

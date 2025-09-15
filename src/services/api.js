@@ -241,6 +241,26 @@ export const api = {
       console.error('Get Folder failed:', error);
       return { success: false, message: error.message };
     }
-  }
+  },
+
+  async uploadFileInFolder(file, folderId) {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('folderId', folderId);
+
+      const response = await fetch(`${BACKEND_URL}/files/upload`, {
+        method: 'POST',
+        credentials: 'include',
+        body: formData
+      });
+      
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Upload failed:', error);
+      return { success: false, message: error.message };
+    }
+  },
 
 };
