@@ -192,19 +192,6 @@ The application will be available at `http://localhost:5173`
 - Input validation and sanitization
 - Secure file upload with type restrictions
 
-## 📦 Deployment
-
-### Backend Deployment (Render)
-1. Connect your GitHub repository to Render
-2. Configure environment variables in Render dashboard
-3. Set build command: `npm install && npx prisma generate`
-4. Set start command: `npm start`
-
-### Frontend Deployment (Render)
-1. Connect your frontend repository to Render
-2. Set build command: `npm run build`
-3. Set publish directory: `build`
-4. Configure environment variables
 
 ## 🔧 Configuration
 
@@ -219,7 +206,7 @@ The application uses Prisma with the following main models:
 - **Folder**: Folder organization and hierarchy
 
 
-## 🐛 Known Issues
+## Known Issues
 
 - File preview may not work for all file types
 - Large file uploads may timeout on slower connections
