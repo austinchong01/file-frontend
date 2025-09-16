@@ -195,8 +195,6 @@ The application will be available at `http://localhost:5173`
 - Secure file upload with type restrictions
 
 
-## 🔧 Configuration
-
 ### File Upload Limits
 - Maximum file size: 10MB
 - Supported formats: Images (JPEG, PNG, GIF, WebP), Videos (MP4, MOV), Documents (PDF)
