@@ -32,7 +32,7 @@ const Login = () => {
       <div className="w-full max-w-md">
         <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
-            Login
+            Login TEST
           </h1>
           
           <form onSubmit={handleSubmit}>
