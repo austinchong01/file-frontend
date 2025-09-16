@@ -1,5 +1,7 @@
-// src/services/api.js
+// src/services/api.js - Updated with better error handling and debugging
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+
+console.log('Backend URL:', BACKEND_URL);
 
 export const api = {
     async testConnection() {
@@ -26,9 +28,11 @@ export const api = {
 
   async login(email, password) {
     try {
+      console.log('Attempting login to:', `${BACKEND_URL}/auth/login`);
+      
       const response = await fetch(`${BACKEND_URL}/auth/login`, {
         method: 'POST',
-        credentials: 'include',
+        credentials: 'include', // This is crucial for cookies
         headers: {
           'Content-Type': 'application/json',
         },
@@ -38,7 +42,12 @@ export const api = {
         })
       });
       
+      console.log('Login response status:', response.status);
+      console.log('Login response headers:', response.headers);
+      
       const data = await response.json();
+      console.log('Login response data:', data);
+      
       return data;
     } catch (error) {
       console.error('Login failed:', error);
@@ -72,15 +81,22 @@ export const api = {
 
   async dashboard() {
     try {
+      console.log('Attempting dashboard request to:', `${BACKEND_URL}/dashboard`);
+      
       const response = await fetch(`${BACKEND_URL}/dashboard`, {
         method: 'GET',
-        credentials: 'include',
+        credentials: 'include', // This is crucial for cookies
         headers: {
           'Content-Type': 'application/json',
         },
       });
       
+      console.log('Dashboard response status:', response.status);
+      console.log('Dashboard response headers:', response.headers);
+      
       const data = await response.json();
+      console.log('Dashboard response data:', data);
+      
       return data;
     } catch (error) {
       console.error('Dashboard fetch failed:', error);
@@ -88,6 +104,8 @@ export const api = {
     }
   },
 
+  // ... rest of your API methods remain the same, but add credentials: 'include' to all
+  
   async download(fileId) {
     try {
       // Create a temporary anchor element to trigger download
