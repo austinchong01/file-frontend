@@ -5,49 +5,60 @@ import { api } from '../services/api';
 const File = ({ file, onFileDeleted, onFileRenamed }) => {
   const [isRenaming, setIsRenaming] = useState(false);
   const [newName, setNewName] = useState(file.displayName || file.originalName);
+  const [message, setMessage] = useState('');
 
   const handleDownload = async () => {
-    console.log('Downloading...');
+    setMessage('Downloading...');
     const result = await api.download(file.id);
     
     if (result.success) {
-      console.log('Download started');
+      setMessage('Download started');
+      // Clear message after 3 seconds
+      setTimeout(() => setMessage(''), 3000);
     } else {
-      console.log(`Download failed: ${result.message}`);
+      setMessage(`Download failed: ${result.message}`);
+      setTimeout(() => setMessage(''), 5000);
     }
   };
 
   const handleRename = async () => {
     if (!isRenaming) {
       setIsRenaming(true);
+      setMessage('');
       return;
     }
 
-    console.log('Renaming...');
+    setMessage('Renaming...');
     const result = await api.renameFile(file.id, newName);
     
     if (result.success) {
-      console.log('File renamed successfully');
+      setMessage('File renamed successfully');
       setIsRenaming(false);
       // Call the callback to update the parent component
       if (onFileRenamed) {
         onFileRenamed(file.id, newName);
       }
+      setTimeout(() => setMessage(''), 3000);
     } else {
-      console.log(`Rename failed: ${result.message}`);
+      setMessage(`Rename failed: ${result.message}`);
+      setTimeout(() => setMessage(''), 5000);
     }
   };
 
   const cancelRename = () => {
     setIsRenaming(false);
     setNewName(file.displayName || file.originalName);
+    setMessage('');
   };
 
   const handlePreview = () => {
     if (file.cloudinaryUrl) {
       window.open(file.cloudinaryUrl, '_blank');
+      setMessage('Opening preview...');
+      setTimeout(() => setMessage(''), 2000);
     } else {
-      console.log('Preview not available');
+      setMessage('Preview not available');
+      setTimeout(() => setMessage(''), 3000);
     }
   };
 
@@ -56,17 +67,18 @@ const File = ({ file, onFileDeleted, onFileRenamed }) => {
       return;
     }
 
-    console.log('Deleting...');
+    setMessage('Deleting...');
     const result = await api.deleteFile(file.id);
     
     if (result.success) {
-      console.log('File deleted successfully');
+      setMessage('File deleted successfully');
       // Call the callback with the file ID to remove it from state
       if (onFileDeleted) {
         onFileDeleted(file.id);
       }
     } else {
-      console.log(`Delete failed: ${result.message}`);
+      setMessage(`Delete failed: ${result.message}`);
+      setTimeout(() => setMessage(''), 5000);
     }
   };
 
@@ -126,6 +138,13 @@ const File = ({ file, onFileDeleted, onFileRenamed }) => {
               Delete
             </button>
           </div>
+        </div>
+      )}
+      
+      {/* Message display */}
+      {message && (
+        <div className="mt-3 p-2 bg-blue-100 border border-blue-300 rounded text-sm text-blue-800">
+          {message}
         </div>
       )}
     </div>

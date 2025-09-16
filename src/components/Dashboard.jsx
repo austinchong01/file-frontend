@@ -41,8 +41,12 @@ const Dashboard = () => {
       await loadDashboard();
       // Clear the file input
       event.target.value = '';
+      // Clear message after 3 seconds
+      setTimeout(() => setUploadMessage(''), 3000);
     } else {
       setUploadMessage(`Upload failed: ${result.message}`);
+      // Clear error message after 5 seconds
+      setTimeout(() => setUploadMessage(''), 5000);
     }
   };
 
@@ -51,6 +55,7 @@ const Dashboard = () => {
     
     if (!folderName || !folderName.trim()) {
       setFolderMessage("Folder name is required");
+      setTimeout(() => setFolderMessage(''), 3000);
       return;
     }
 
@@ -59,10 +64,14 @@ const Dashboard = () => {
     const result = await api.newFolder(folderName);
     
     if (result.success) {
-      setFolderMessage("Folder uploaded successfully!");
+      setFolderMessage("Folder created successfully!");
       await loadDashboard();
+      // Clear message after 3 seconds
+      setTimeout(() => setFolderMessage(''), 3000);
     } else {
       setFolderMessage(`Folder creation failed: ${result.message}`);
+      // Clear error message after 5 seconds
+      setTimeout(() => setFolderMessage(''), 5000);
     }
   };
 

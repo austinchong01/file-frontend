@@ -9,75 +9,92 @@ const Folder = ({ folder, onFolderDeleted }) => {
   const [currentName, setCurrentName] = useState(folder.name);
   const [isViewingContents, setIsViewingContents] = useState(false);
   const [folderFiles, setFolderFiles] = useState([]);
+  const [message, setMessage] = useState('');
+  const [uploadMessage, setUploadMessage] = useState('');
 
   const handleRename = async () => {
     if (!isRenaming) {
       setIsRenaming(true);
+      setMessage('');
       return;
     }
 
-    console.log("Renaming...");
+    setMessage("Renaming...");
     const result = await api.renameFolder(folder.id, newName);
 
     if (result.success) {
-      console.log("Folder renamed successfully");
+      setMessage("Folder renamed successfully");
       setCurrentName(newName);
       setIsRenaming(false);
+      setTimeout(() => setMessage(''), 3000);
     } else {
-      console.log(`Rename failed: ${result.message}`);
+      setMessage(`Rename failed: ${result.message}`);
+      setTimeout(() => setMessage(''), 5000);
     }
   };
 
   const cancelRename = () => {
     setIsRenaming(false);
     setNewName(currentName);
+    setMessage('');
   };
 
   const handleDelete = async () => {
     if (!confirm(`Are you sure you want to delete "${currentName}"?`)) {
       return;
     }
-    console.log("Deleting...");
+    setMessage("Deleting...");
     const result = await api.deleteFolder(folder.id);
     if (result.success) {
-      console.log("Folder deleted successfully");
+      setMessage("Folder deleted successfully");
       if (onFolderDeleted) {
         onFolderDeleted(folder.id);
       }
     } else {
-      console.log(`Delete failed: ${result.message}`);
+      setMessage(`Delete failed: ${result.message}`);
+      setTimeout(() => setMessage(''), 5000);
     }
   };
 
   const handleViewFolder = async () => {
+    setMessage("Loading folder contents...");
     const result = await api.getFolder(folder.id);
 
     if (result.success) {
       setFolderFiles(result.files);
       setIsViewingContents(true);
+      setMessage('');
     } else {
-      console.log(`Failed to Retrieve Folder: ${result.message}`);
+      setMessage(`Failed to retrieve folder: ${result.message}`);
+      setTimeout(() => setMessage(''), 5000);
     }
   };
 
   const handleBackToFolder = () => {
     setIsViewingContents(false);
     setFolderFiles([]);
+    setUploadMessage('');
   };
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
     
+    setUploadMessage("Uploading file...");
     const result = await api.uploadFileInFolder(file, folder.id);
     
     if (result.success) {
+      setUploadMessage("File uploaded successfully!");
       const refreshResult = await api.getFolder(folder.id);
       if (refreshResult.success) {
         setFolderFiles(refreshResult.files);
       }
+      // Clear the file input
+      event.target.value = '';
+      setTimeout(() => setUploadMessage(''), 3000);
     } else {
-      console.log(`Upload failed: ${result.message}`);
+      setUploadMessage(`Upload failed: ${result.message}`);
+      setTimeout(() => setUploadMessage(''), 5000);
     }
   };
 
@@ -102,7 +119,7 @@ const Folder = ({ folder, onFolderDeleted }) => {
   return (
     <div>
       {isViewingContents ? (
-        <div className="min-h-screen bg-gray-100">
+        <div className="bg-gray-100">
           {/* Header */}
           <div className="bg-blue-500 text-white px-8 py-4">
             <div className="flex items-center gap-4">
@@ -136,6 +153,13 @@ const Folder = ({ folder, onFolderDeleted }) => {
                   className="hidden"
                 />
               </div>
+              
+              {/* Upload Message */}
+              {uploadMessage && (
+                <div className="mt-3 p-2 bg-blue-100 border border-blue-300 rounded text-sm text-blue-800">
+                  {uploadMessage}
+                </div>
+              )}
             </div>
 
             {/* Files Section */}
@@ -209,6 +233,13 @@ const Folder = ({ folder, onFolderDeleted }) => {
                   Delete
                 </button>
               </div>
+            </div>
+          )}
+          
+          {/* Message display for folder operations */}
+          {message && (
+            <div className="mt-3 p-2 bg-blue-100 border border-blue-300 rounded text-sm text-blue-800">
+              {message}
             </div>
           )}
         </div>
