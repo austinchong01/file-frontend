@@ -263,4 +263,22 @@ export const api = {
     }
   },
 
+  async logout() {
+    try {
+      const response = await fetch(`${BACKEND_URL}/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Logout failed:', error);
+      return { success: false, message: error.message };
+    }
+  },
+
 };

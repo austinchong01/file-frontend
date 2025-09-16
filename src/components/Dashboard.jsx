@@ -1,8 +1,9 @@
-// src/components/Dashboard.jsx
+// src/components/Dashboard.jsx - Updated with logout functionality
 import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import { api } from "../services/api";
 import File from "./File";
-import Folder from "./Folder"
+import Folder from "./Folder";
 
 const Dashboard = () => {
   const [files, setFiles] = useState([]);
@@ -10,6 +11,7 @@ const Dashboard = () => {
   const [message, setMessage] = useState("Loading dashboard...");
   const [uploadMessage, setUploadMessage] = useState("");
   const [folderMessage, setFolderMessage] = useState("");
+  const navigate = useNavigate();
 
   const loadDashboard = async () => {
     const result = await api.dashboard();
@@ -19,13 +21,26 @@ const Dashboard = () => {
       setFiles(result.files);
       setFolders(result.folders);
     } else {
-      setMessage(`Dashboard failed to load: ${result.message}`);
+      if (result.message === 'Authentication required' || result.redirect === '/login') {
+        navigate('/login');
+      } else {
+        setMessage(`Dashboard failed to load: ${result.message}`);
+      }
     }
   };
 
   useEffect(() => {
     loadDashboard();
   }, []);
+
+  const handleLogout = async () => {
+    const result = await api.logout();
+    if (result.success) {
+      navigate('/login');
+    } else {
+      console.error('Logout failed:', result.message);
+    }
+  };
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
@@ -41,11 +56,9 @@ const Dashboard = () => {
       await loadDashboard();
       // Clear the file input
       event.target.value = '';
-      // Clear message after 3 seconds
       setTimeout(() => setUploadMessage(''), 3000);
     } else {
       setUploadMessage(`Upload failed: ${result.message}`);
-      // Clear error message after 5 seconds
       setTimeout(() => setUploadMessage(''), 5000);
     }
   };
@@ -66,11 +79,9 @@ const Dashboard = () => {
     if (result.success) {
       setFolderMessage("Folder created successfully!");
       await loadDashboard();
-      // Clear message after 3 seconds
       setTimeout(() => setFolderMessage(''), 3000);
     } else {
       setFolderMessage(`Folder creation failed: ${result.message}`);
-      // Clear error message after 5 seconds
       setTimeout(() => setFolderMessage(''), 5000);
     }
   };
@@ -97,7 +108,15 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <div className="bg-blue-700 text-white px-8 py-4">
-        <h1 className="text-2xl font-bold">{message}</h1>
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold">{message}</h1>
+          <button 
+            onClick={handleLogout}
+            className="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded transition-colors duration-200"
+          >
+            Logout
+          </button>
+        </div>
       </div>
       
       {/* Main Content */}
