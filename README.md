@@ -7,7 +7,7 @@ A full-stack file management application that allows users to upload, organize, 
 - Test Account:
    - Username: test@gmail.com | Password: asdfasdf
 - Please do not upload more than 10mb of files on one account, I am using a free Cloudinary account :)
-- Please do not create an unncecessary amount of users, I am using a free Aiven dadtabase :)
+- Please do not create an unncecessary amount of users, I am using a free Aiven database :)
 
 ## Features
 
