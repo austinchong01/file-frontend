@@ -3,8 +3,13 @@
 A full-stack file management application that allows users to upload, organize, and manage files in folders with secure authentication.
 
 🔗 **Live Demo**: [https://file-frontend-lnuo.onrender.com/](https://file-frontend-lnuo.onrender.com/)
+- The website may take time to register a user
+- Test Account:
+   - Username: test@gmail.com | Password: asdfasdf
+- Please do not upload more than 10mb of files on one account, I am using a free Cloudinary account :)
+- Please do not create an unncecessary amount of users, I am using a free Aiven dadtabase :)
 
-## ✨ Features
+## Features
 
 ### User Authentication
 - User registration and login
@@ -94,7 +99,7 @@ file-uploader/
 └── README.md
 ```
 
-## 🚀 Getting Started
+## Devloping your own:
 
 ### Prerequisites
 - Node.js (v18 or higher)
@@ -140,23 +145,18 @@ file-uploader/
 
 ### Frontend Setup
 
-1. **Navigate to frontend directory**
-   ```bash
-   cd ../frontend
-   ```
-
-2. **Install dependencies**
+1. **Install dependencies**
    ```bash
    npm install
    ```
 
-3. **Environment Variables**
+2. **Environment Variables**
    Create a `.env` file in the frontend directory:
    ```env
    VITE_BACKEND_URL="http://localhost:3000"
    ```
 
-4. **Start the development server**
+3. **Start the development server**
    ```bash
    npm run dev
    ```
@@ -218,36 +218,11 @@ The application uses Prisma with the following main models:
 - **File**: File metadata and Cloudinary references
 - **Folder**: Folder organization and hierarchy
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🐛 Known Issues
 
 - File preview may not work for all file types
 - Large file uploads may timeout on slower connections
-
-## 🔮 Future Enhancements
-
-- [ ] File sharing with other users
-- [ ] Bulk file operations
-- [ ] Advanced search and filtering
-- [ ] File versioning
-- [ ] Integration with other cloud storage providers
-- [ ] Real-time collaboration features
-
-## 📞 Support
-
-For support, please open an issue in the GitHub repository or contact [your-email@example.com].
-
----
-
-**Built with ❤️ using React, Node.js, and modern web technologies**
+- Prone to code injection
+- No drag-and-drop functionality
+- No nested folder functionality
