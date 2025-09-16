@@ -3,6 +3,7 @@ import Test from './components/Test'
 import Login from './components/Login'
 import Register from './components/Register'
 import Dashboard from './components/Dashboard'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
   return (
@@ -11,7 +12,14 @@ function App() {
         <Route path="/test" element={<Test />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route 
+          path="/dashboard" 
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } 
+        />
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
     </Router>

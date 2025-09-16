@@ -1,5 +1,5 @@
-// src/components/Login.jsx
-import { useState } from 'react';
+// src/components/Login.jsx - Enhanced with JWT auth check
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
 
@@ -7,10 +7,25 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  // Check if user is already authenticated
+  useEffect(() => {
+    if (api.isAuthenticated()) {
+      // Optional: verify token is still valid
+      api.dashboard().then((result) => {
+        if (result.success) {
+          navigate('/dashboard');
+        }
+        // If token is invalid, api.dashboard() will remove it automatically
+      });
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     setMessage('Logging in...');
     
     const result = await api.login(email, password);
@@ -21,6 +36,8 @@ const Login = () => {
     } else {
       setMessage(`Login failed: ${result.message}`);
     }
+    
+    setIsLoading(false);
   };
 
   const goToRegister = () => {
@@ -46,6 +63,7 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
                 required
+                disabled={isLoading}
               />
             </div>
             
@@ -59,28 +77,37 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
                 required
+                disabled={isLoading}
               />
             </div>
             
             <button 
               type="submit"
-              className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              disabled={isLoading}
+              className={`w-full font-bold py-2 px-4 rounded ${
+                isLoading 
+                  ? 'bg-gray-400 cursor-not-allowed' 
+                  : 'bg-blue-500 hover:bg-blue-700'
+              } text-white`}
             >
-              Login
+              {isLoading ? 'Logging in...' : 'Login'}
             </button>
           </form>
           
           <div className="text-center mt-4">
             <button 
               onClick={goToRegister}
-              className="text-blue-500 hover:text-blue-800 text-sm"
+              disabled={isLoading}
+              className="text-blue-500 hover:text-blue-800 text-sm disabled:text-gray-400"
             >
               Don't have an account? Register here
             </button>
           </div>
           
           {message && (
-            <p className="text-center text-sm mt-4 text-gray-600">
+            <p className={`text-center text-sm mt-4 ${
+              message.includes('successful') ? 'text-green-600' : 'text-red-600'
+            }`}>
               {message}
             </p>
           )}
