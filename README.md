@@ -3,9 +3,8 @@
 A full-stack file management application that allows users to upload, organize, and manage files in folders with secure authentication.
 
 ---
-## **PROJECT PURPOSE**
 
-> ### **This application serves as a demonstration of core full-stack development skills and fundamental technologies required to build, deploy, and maintain modern web applications. While the functionality is intentionally straightforward, it showcases proficiency in essential development practices including authentication, database management, cloud storage integration, and responsive UI design.**
+> ### ## **PROJECT PURPOSE** **This application serves as a demonstration of core full-stack development skills and fundamental technologies required to build, deploy, and maintain modern web applications. While the functionality is intentionally straightforward, it showcases proficiency in essential development practices including authentication, database management, cloud storage integration, and responsive UI design.**
 
 ---
 
