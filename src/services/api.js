@@ -76,9 +76,7 @@ export const api = {
   },
 
   async login(email, password) {
-    try {
-      console.log('Attempting login to:', `${BACKEND_URL}/auth/login`);
-      
+    try {    
       const response = await fetch(`${BACKEND_URL}/auth/login`, {
         method: 'POST',
         credentials: 'include',
@@ -91,15 +89,11 @@ export const api = {
         })
       });
       
-      console.log('Login response status:', response.status);
-      
       const data = await response.json();
-      console.log('Login response data:', data);
       
       // Store JWT token if login successful
       if (data.success && data.token) {
         tokenUtils.setToken(data.token);
-        console.log('JWT token stored successfully');
       }
       
       return data;
@@ -130,7 +124,6 @@ export const api = {
       // Store JWT token if registration successful
       if (data.success && data.token) {
         tokenUtils.setToken(data.token);
-        console.log('JWT token stored after registration');
       }
       
       return data;
@@ -141,17 +134,12 @@ export const api = {
   },
 
   async dashboard() {
-    try {
-      console.log('Attempting dashboard request to:', `${BACKEND_URL}/dashboard`);
-      
+    try {      
       const response = await authenticatedFetch(`${BACKEND_URL}/dashboard`, {
         method: 'GET'
       });
-      
-      console.log('Dashboard response status:', response.status);
-      
+            
       const data = await response.json();
-      console.log('Dashboard response data:', data);
       
       // If authentication failed, remove invalid token
       if (!data.success && (data.message?.includes('Authentication') || data.redirect === '/login')) {
