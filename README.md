@@ -64,110 +64,9 @@ A full-stack file management application that allows users to upload, organize, 
 ### Deployment
 - **Frontend**: Render
 - **Backend**: Render
-- **Database**: PostgreSQL (hosted)
+- **Database**: Aiven PostgreSQL
 - **File Storage**: Cloudinary
 
-## 📁 Project Structure
-
-```
-file-uploader/
-├── backend/
-│   ├── config/
-│   │   ├── cloudinary.js
-│   │   └── passport.js
-│   ├── controllers/
-│   ├── middleware/
-│   │   └── jwtAuth.js
-│   ├── prisma/
-│   │   ├── schema.prisma
-│   │   └── migrations/
-│   ├── routes/
-│   │   ├── auth.js
-│   │   ├── files.js
-│   │   ├── folders.js
-│   │   └── index.js
-│   ├── utils/
-│   │   └── jwt.js
-│   └── server.js
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Dashboard.jsx
-│   │   │   ├── Login.jsx
-│   │   │   ├── Register.jsx
-│   │   │   ├── File.jsx
-│   │   │   ├── Folder.jsx
-│   │   │   └── ProtectedRoute.jsx
-│   │   ├── services/
-│   │   │   └── api.js
-│   │   └── App.jsx
-│   └── public/
-└── README.md
-```
-
-## Devloping your own:
-
-### Prerequisites
-- Node.js (v18 or higher)
-- PostgreSQL database
-- Cloudinary account for file storage
-
-### Backend Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd file-uploader/backend
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Environment Variables**
-   Create a `.env` file in the backend directory:
-   ```env
-   DATABASE_URL="postgresql://username:password@localhost:5432/fileuploader"
-   JWT_SECRET="your-super-secure-jwt-secret"
-   JWT_EXPIRES_IN="24h"
-   CLOUDINARY_CLOUD_NAME="your-cloudinary-cloud-name"
-   CLOUDINARY_API_KEY="your-cloudinary-api-key"
-   CLOUDINARY_API_SECRET="your-cloudinary-api-secret"
-   FRONTEND_URL="http://localhost:5173"
-   PORT=3000
-   ```
-
-4. **Database Setup**
-   ```bash
-   npx prisma migrate dev
-   npx prisma generate
-   ```
-
-5. **Start the backend server**
-   ```bash
-   npm run dev
-   ```
-
-### Frontend Setup
-
-1. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-2. **Environment Variables**
-   Create a `.env` file in the frontend directory:
-   ```env
-   VITE_BACKEND_URL="http://localhost:3000"
-   ```
-
-3. **Start the development server**
-   ```bash
-   npm run dev
-   ```
-
-The application will be available at `http://localhost:5173`
 
 ## 📖 API Documentation
 
@@ -217,3 +116,41 @@ The application uses Prisma with the following main models:
 - Prone to code injection
 - No drag-and-drop functionality
 - No nested folder functionality
+
+## 📁 Project Structure
+
+```
+file-uploader/
+├── backend/
+│   ├── config/
+│   │   ├── cloudinary.js
+│   │   └── passport.js
+│   ├── controllers/
+│   ├── middleware/
+│   │   └── jwtAuth.js
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   └── migrations/
+│   ├── routes/
+│   │   ├── auth.js
+│   │   ├── files.js
+│   │   ├── folders.js
+│   │   └── index.js
+│   ├── utils/
+│   │   └── jwt.js
+│   └── server.js
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── Login.jsx
+│   │   │   ├── Register.jsx
+│   │   │   ├── File.jsx
+│   │   │   ├── Folder.jsx
+│   │   │   └── ProtectedRoute.jsx
+│   │   ├── services/
+│   │   │   └── api.js
+│   │   └── App.jsx
+│   └── public/
+└── README.md
+```
