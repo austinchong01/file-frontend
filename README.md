@@ -106,13 +106,11 @@ A full-stack file management application that allows users to upload, organize, 
 The application uses Prisma with the following main models:
 - **User**: User authentication and profile
 - **File**: File metadata and Cloudinary references
-- **Folder**: Folder organization and hierarchy
-
 
 ## Known Issues
 
-- File preview may not work for all file types
-- Large file uploads may timeout on slower connections
+- File preview will not work for all file types
+- Large file uploads may timeout
 - Prone to code injection
 - No drag-and-drop functionality
 - No nested folder functionality
