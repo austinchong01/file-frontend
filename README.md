@@ -1,6 +1,6 @@
 # File Uploader Application
 
-A full-stack file management application that allows users to upload, organize, and manage files in folders with secure authentication. (Backend url: https://github.com/austinchong01/file)
+A full-stack file management application that allows users to upload, organize, and manage files in folders with secure authentication. (Backend: https://github.com/austinchong01/file)
 
 ---
 ## 🎯 **PROJECT PURPOSE**
