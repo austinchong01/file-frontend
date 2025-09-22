@@ -163,7 +163,6 @@ async download(fileId) {
     console.log('Backend URL:', BACKEND_URL);
     console.log('File ID:', fileId);
     console.log('Token exists:', !!token);
-    console.log('Token length:', token ? token.length : 0);
     
     if (!token) {
       console.log('❌ No token available');
@@ -174,11 +173,19 @@ async download(fileId) {
     const downloadUrl = `${BACKEND_URL}/files/${fileId}/download?token=${encodeURIComponent(token)}`;
     console.log('Download URL:', downloadUrl);
     
-    // Use window.open to bypass CORS issues
+    // Use window.open and check if it was blocked
     console.log('Opening download URL...');
-    window.open(downloadUrl, '_blank');
+    const newWindow = window.open(downloadUrl, '_blank');
     
-    console.log('✅ Download initiated');
+    // Check if pop-up was blocked
+    if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+      console.log('❌ Pop-up blocked - falling back to direct navigation');
+      // Fallback: navigate in current tab
+      window.location.href = downloadUrl;
+      return { success: true, message: 'Download started (pop-up was blocked)' };
+    }
+    
+    console.log('✅ Download window opened');
     console.log('=== END FRONTEND DOWNLOAD DEBUG ===');
     return { success: true };
   } catch (error) {
