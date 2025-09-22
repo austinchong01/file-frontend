@@ -156,25 +156,36 @@ export const api = {
     }
   },
 
-  async download(fileId) {
-    try {
-      const token = tokenUtils.getToken();
-      if (!token) {
-        return { success: false, message: "No authentication token" };
-      }
-
-      const downloadUrl = `${BACKEND_URL}/files/${fileId}/download?token=${encodeURIComponent(
-        token
-      )}`;
-
-      window.open(downloadUrl, "_blank");
-
-      return { success: true };
-    } catch (error) {
-      console.error("Download failed:", error);
-      return { success: false, message: error.message };
+async download(fileId) {
+  try {
+    const token = tokenUtils.getToken();
+    console.log('=== FRONTEND DOWNLOAD DEBUG ===');
+    console.log('Backend URL:', BACKEND_URL);
+    console.log('File ID:', fileId);
+    console.log('Token exists:', !!token);
+    console.log('Token length:', token ? token.length : 0);
+    
+    if (!token) {
+      console.log('❌ No token available');
+      return { success: false, message: 'No authentication token' };
     }
-  },
+
+    // Create download URL with token as query parameter
+    const downloadUrl = `${BACKEND_URL}/files/${fileId}/download?token=${encodeURIComponent(token)}`;
+    console.log('Download URL:', downloadUrl);
+    
+    // Use window.open to bypass CORS issues
+    console.log('Opening download URL...');
+    window.open(downloadUrl, '_blank');
+    
+    console.log('✅ Download initiated');
+    console.log('=== END FRONTEND DOWNLOAD DEBUG ===');
+    return { success: true };
+  } catch (error) {
+    console.error('❌ Download failed:', error);
+    return { success: false, message: error.message };
+  }
+},
 
   async renameFile(fileId, displayName) {
     try {
