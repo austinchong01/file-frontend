@@ -156,68 +156,6 @@ export const api = {
     }
   },
 
-async download(fileId) {
-  try {
-    const token = tokenUtils.getToken();
-    console.log('=== FRONTEND DOWNLOAD DEBUG ===');
-    console.log('Backend URL:', BACKEND_URL);
-    console.log('File ID:', fileId);
-    console.log('Token exists:', !!token);
-    
-    if (!token) {
-      console.log('❌ No token available');
-      return { success: false, message: 'No authentication token' };
-    }
-
-    // Create download URL with token as query parameter
-    const downloadUrl = `${BACKEND_URL}/files/${fileId}/download?token=${encodeURIComponent(token)}`;
-    console.log('Download URL:', downloadUrl);
-    
-    // Use window.open and check if it was blocked
-    console.log('Opening download URL...');
-    const newWindow = window.open(downloadUrl, '_blank');
-    
-    // Check if pop-up was blocked
-    if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-      console.log('❌ Pop-up blocked - falling back to direct navigation');
-      // Fallback: navigate in current tab
-      window.location.href = downloadUrl;
-      return { success: true, message: 'Download started (pop-up was blocked)' };
-    }
-    
-    console.log('✅ Download window opened');
-    console.log('=== END FRONTEND DOWNLOAD DEBUG ===');
-    return { success: true };
-  } catch (error) {
-    console.error('❌ Download failed:', error);
-    return { success: false, message: error.message };
-  }
-},
-
-  async renameFile(fileId, displayName) {
-    try {
-      const response = await authenticatedFetch(`${BACKEND_URL}/files/rename`, {
-        method: "POST",
-        body: JSON.stringify({
-          fileId: fileId,
-          displayName: displayName,
-        }),
-      });
-
-      const data = await response.json();
-
-      // Handle authentication failures
-      if (!data.success && data.redirect === "/login") {
-        tokenUtils.removeToken();
-      }
-
-      return data;
-    } catch (error) {
-      console.error("Rename failed:", error);
-      return { success: false, message: error.message };
-    }
-  },
-
   async deleteFile(fileId) {
     try {
       const response = await authenticatedFetch(

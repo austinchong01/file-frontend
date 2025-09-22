@@ -7,20 +7,6 @@ const File = ({ file, onFileDeleted, onFileRenamed }) => {
   const [newName, setNewName] = useState(file.displayName || file.originalName);
   const [message, setMessage] = useState('');
 
-  const handleDownload = async () => {
-    setMessage('Downloading...');
-    const result = await api.download(file.id);
-    
-    if (result.success) {
-      setMessage('Download started');
-      // Clear message after 3 seconds
-      setTimeout(() => setMessage(''), 3000);
-    } else {
-      setMessage(`Download failed: ${result.message}`);
-      setTimeout(() => setMessage(''), 5000);
-    }
-  };
-
   const handleRename = async () => {
     if (!isRenaming) {
       setIsRenaming(true);
@@ -113,12 +99,6 @@ const File = ({ file, onFileDeleted, onFileRenamed }) => {
             {file.displayName || file.originalName}
           </span>
           <div className="flex flex-wrap gap-2">
-            <button 
-              onClick={handleDownload}
-              className="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-3 rounded text-sm"
-            >
-              Download
-            </button>
             <button 
               onClick={handlePreview}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-sm"
