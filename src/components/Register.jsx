@@ -31,9 +31,9 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <div className="min-h-screen bg-gray-700 flex items-center justify-center">
       <div className="w-full max-w-md">
-        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div className="bg-gray-200 shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
             Register
           </h1>

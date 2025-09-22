@@ -178,7 +178,7 @@ const Folder = ({ folder, onFolderDeleted }) => {
           </div>
         </div>
       ) : (
-        <div className="border border-gray-200 rounded-lg p-4 bg-blue-50">
+        <div className="border bg-white rounded-lg p-4 bg-blue-50">
           {isRenaming ? (
             <div className="flex flex-col sm:flex-row gap-2">
               <input
@@ -203,7 +203,7 @@ const Folder = ({ folder, onFolderDeleted }) => {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 ">
               <div className="flex items-center gap-2">
                 <span className="text-blue-600 text-lg">📁</span>
                 <span className="text-gray-800 font-medium">{currentName}</span>
