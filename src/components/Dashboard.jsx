@@ -17,7 +17,7 @@ const Dashboard = () => {
     const result = await api.dashboard();
 
     if (result.success) {
-      setMessage(`Dashboard - Welcome ${result.user.name}`);
+      setMessage(`${result.user.name}'s Dashboard`);
       setFiles(result.files);
       setFolders(result.folders);
     } else {
@@ -123,7 +123,6 @@ const Dashboard = () => {
       <div className="max-w-4xl mx-auto p-6">
         {/* Upload Section */}
         <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Add Files & Folders</h2>
           
           <div className="flex flex-col sm:flex-row gap-4 mb-4">
             <div className="flex-1">
@@ -160,7 +159,7 @@ const Dashboard = () => {
         {/* Folders Section */}
         {folders.length > 0 && (
           <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Your Folders:</h2>
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Folders</h2>
             <div className="space-y-2">
               {folders.map((folder) => (
                 <div key={folder.id}>
@@ -174,7 +173,7 @@ const Dashboard = () => {
         {/* Files Section */}
         {files.length > 0 && (
           <div className="bg-white shadow-md rounded px-8 pt-6 pb-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Your Files:</h2>
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Files</h2>
             <div className="space-y-2">
               {files.map((file) => (
                 <File 

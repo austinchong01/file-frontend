@@ -129,7 +129,7 @@ const Folder = ({ folder, onFolderDeleted }) => {
               >
                 ← Back
               </button>
-              <h1 className="text-2xl font-bold">Contents of {currentName}</h1>
+              <h1 className="text-2xl font-bold">{currentName}</h1>
             </div>
           </div>
 
@@ -139,19 +139,15 @@ const Folder = ({ folder, onFolderDeleted }) => {
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-6">
               <h2 className="text-xl font-bold text-gray-800 mb-4">Upload File to Folder</h2>
               <div className="flex items-center gap-4">
-                <button 
-                  onClick={triggerFileUpload}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  Upload File
-                </button>
-                <input 
-                  id={`file-input-${folder.id}`}
-                  type="file" 
-                  onChange={handleFileUpload}
-                  accept="image/*,video/*,application/pdf"
-                  className="hidden"
-                />
+                <div className="flex-1">
+                  <input 
+                    id={`file-input-${folder.id}`}
+                    type="file" 
+                    onChange={handleFileUpload}
+                    accept="image/*,video/*,application/pdf"
+                    className="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
+                  />
+                </div>
               </div>
               
               {/* Upload Message */}
@@ -164,7 +160,6 @@ const Folder = ({ folder, onFolderDeleted }) => {
 
             {/* Files Section */}
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-8">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Files in Folder</h2>
               {folderFiles.length > 0 ? (
                 <div className="space-y-3">
                   {folderFiles.map((file) => (
