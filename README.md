@@ -8,13 +8,6 @@ A full-stack file management application that allows users to upload, organize, 
 > ### **This application serves as a demonstration of core full-stack development skills and fundamental technologies required to build, deploy, and maintain modern web applications. While the functionality is intentionally straightforward, it showcases proficiency in essential development practices including authentication, database management, cloud storage integration, and responsive UI design.**
 ---
 
-🔗 **Live Demo**: [https://file-frontend-lnuo.onrender.com/](https://file-frontend-lnuo.onrender.com/)
-- The website may take time to register a user
-- Test Account:
-   - Username: test@gmail.com | Password: asdfasdf
-- Please do not upload more than 10mb of files on one account, I am using a free Cloudinary account :)
-- Please do not create an unncecessary amount of users, I am using a free Aiven database :)
-
 ## Features
 
 ### User Authentication
